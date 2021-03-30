@@ -1,4 +1,4 @@
-
+#include <PubSubClient.h>
 #include "Controller.h"
 #include "DHT.h"
 #include <string>
@@ -20,7 +20,7 @@ class TemperatureController : Controller { //dht 11/ dht 22
 
   float getHum(DHT dht); //Humedad
   float getTemp(DHT dht); //Temperatura
-  void subscribeTopic(string topic);
+  void subscribeTopics(PubSubClient client);
 
 };
 
@@ -31,7 +31,8 @@ float TemperatureController::getHum(DHT dht){
 float TemperatureController::getTemp(DHT dht){
   return dht.readTemperature();
 };
-void TemperatureController::subscribeTopic(string topic){
+void TemperatureController::subscribeTopics(PubSubClient client){
+
 
 };
 
