@@ -18,7 +18,6 @@ class Controller{
   void setManualMode(bool state);
   float getTargetValue();
   void setTargetValue(float value);
-  void publishTopic(string msg, string topic);
 };
 
   void Controller::setSensorPinNumber(int pinNumber){
@@ -46,7 +45,4 @@ class Controller{
   };
   void Controller::setTargetValue(float value){
     targetValue = value;
-  };
-  void Controller::publishTopic(string msg, string topic){
-    
   };

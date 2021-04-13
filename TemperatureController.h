@@ -1,28 +1,24 @@
-#include <PubSubClient.h>
-#include "Controller.h"
+
 #include "DHT.h"
 #include <string>
-
-#define DHTTYPE DHT22
-#define DHTPIN 2
 
 
 using namespace std;
 
-class TemperatureController : Controller { //dht 11/ dht 22
+class TemperatureController { //dht 11/ dht 22
 
   private:
-
+  uint8_t sensorPinNumber;
   public:
-  TemperatureController(int pinN){
-    sensorPinNumber = pinN;
-  };
-
+  TemperatureController(int pinN);
   float getHum(DHT dht); //Humedad
   float getTemp(DHT dht); //Temperatura
-  void subscribeTopics(PubSubClient client);
 
 };
+
+TemperatureController::TemperatureController(int pinN){
+    sensorPinNumber = pinN;
+  };
 
 float TemperatureController::getHum(DHT dht){
   return dht.readHumidity();
@@ -30,10 +26,6 @@ float TemperatureController::getHum(DHT dht){
 
 float TemperatureController::getTemp(DHT dht){
   return dht.readTemperature();
-};
-void TemperatureController::subscribeTopics(PubSubClient client){
-
-
 };
 
 
