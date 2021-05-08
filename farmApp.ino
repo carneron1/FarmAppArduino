@@ -20,10 +20,10 @@ LightController lightControl(LDRPIN, LEDPIN);
 
 //*********** MQTT Y WIFI CONFIG *******
 
-const char* ssid = "TP-LINK_914E";
-const char* password = "fender1243";
-//const char* mqtt_server = "mqtt.dioty.co";
+const char* ssid = "**nombre_de_red**";
+const char* password = "**password**";
 const char* mqtt_server = "test.mosquitto.org";
+//const char* mqtt_server = "mqtt.dioty.co";
 
 const int mqtt_port = 1883;
 const char* mqtt_user = "maximilianocalderon87@gmail.com";
@@ -37,10 +37,10 @@ bool manualMode = false;
 bool lightManual = false;
 bool irrigationManual = false;
 
-void callback(char* topic, byte* payload, unsigned int length);
-void reconnect();
-void setup_wifi();
-void readMsg();
+void callback(char* topic, byte* payload, unsigned int length); // Se ejecuta cuando recibe algun msg de un topic
+void reconnect(); //Reconecta con el broker mqtt y se subscribe a los topics
+void setup_wifi(); //Inicaliza wifi
+void readMsg(); //Recibe el topic, el msg y ejecuta el codigo correspondiente
 
 void setup() {
   Serial.begin(9600);
@@ -56,7 +56,7 @@ void setup() {
 
 void loop() {
   if (!client.connected()) {
-  reconnect();
+    reconnect();
 	}
   if(!manualMode){
     humControl.checkStatus();
@@ -73,6 +73,7 @@ void readMsg(){
   if (msg.length()>0){
     Serial.println(msg);
     Serial.println(topic);
+    
     char val[50];
 
     if (msg == "ambientHumidity"){
@@ -114,9 +115,9 @@ void readMsg(){
       client.publish("/maximilianocalderon87@gmail.com/getLightState",lightControl.getLedState());
     };
 
-    if (msg == "manualLightState"){ 
-      client.publish("/maximilianocalderon87@gmail.com/getLightState",lightControl.getLedState());
-    };
+    // if (msg == "manualLightState"){ 
+    //   client.publish("/maximilianocalderon87@gmail.com/getLightState",lightControl.getLedState());
+    // };
 
     if (msg == "manualLightState"){
       char* val;
@@ -168,6 +169,11 @@ void readMsg(){
         digitalWrite(RELEPIN, LOW);
       }
     }
+
+    if (String(topic) == "/maximilianocalderon87@gmail.com/isConnected"){
+      char* val = "true";
+      client.publish("/maximilianocalderon87@gmail.com/getIrrigationManualState",val);
+    };
     msg="";
   }
 }
@@ -201,6 +207,11 @@ void reconnect() {
         Serial.println("fallo Suscripción irrigacion manual");
       }
       if(client.subscribe("/maximilianocalderon87@gmail.com/setLightManual")){
+        Serial.println("Suscripcion iluminacion manual ok");
+      }else{
+        Serial.println("fallo Suscripción iluminacion manual");
+      }
+      if(client.subscribe("/maximilianocalderon87@gmail.com/isConnected")){
         Serial.println("Suscripcion iluminacion manual ok");
       }else{
         Serial.println("fallo Suscripción iluminacion manual");

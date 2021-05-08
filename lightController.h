@@ -28,7 +28,7 @@ void LightController::checkStatus(){
   }else {
     digitalWrite(ledPinNumber, HIGH);
     ledState = true;
-    }
+  }
 };
 
 char* LightController::getLedState(){
